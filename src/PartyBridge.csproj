@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>PartyBridge</AssemblyName>
+    <RootNamespace>PartyBridge</RootNamespace>
+    <Optimize>true</Optimize>
+    <NoWarn>$(NoWarn);WPF0001;CA1416</NoWarn>
+    <Version>1.0.0</Version>
+    <Product>PartyBridge</Product>
+    <Description>Two-way voice bridge between Discord and an Xbox party</Description>
+    <Copyright>Copyright (c) 2026 XxVoidicxX</Copyright>
+    <ApplicationIcon>../assets/PartyBridge.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="../assets/PartyBridge.ico" Link="PartyBridge.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.IO" />
+    <PackageReference Include="NAudio.Core" Version="2.2.1" />
+    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,131 @@
+<Window x:Class="PartyBridge.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PartyBridge" Icon="pack://application:,,,/PartyBridge.ico" Width="1080" Height="740" MinWidth="900" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgBrush}" Foreground="{StaticResource TextBrush}">
+    <Grid Background="{StaticResource BgBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0" Margin="20,14,20,10">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <ToggleButton x:Name="PauseToggle" Content="PAUSE RELAY" Margin="0,0,8,0"
+                              ToolTip="Stop passing Discord and Xbox voices across. Your mic still goes to both (Ctrl+Alt+P)"/>
+                <ToggleButton x:Name="MuteToggle" Content="MUTE MY MIC" Margin="0,0,8,0"
+                              ToolTip="Silence your own mic on both sides (Ctrl+Alt+N)"/>
+                <Button x:Name="StartBtn" Content="START" MinWidth="120"/>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="PARTYBRIDGE" FontSize="28" FontWeight="Black"/>
+                <TextBlock Text="Discord and your Xbox party, hearing each other through you"
+                           Foreground="{StaticResource MutedBrush}" FontSize="12"/>
+            </StackPanel>
+        </DockPanel>
+
+        <Grid Grid.Row="1" Margin="20,0,20,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Discord side -->
+            <Border Grid.Column="0" Padding="16,6,16,14" CornerRadius="10" Background="{StaticResource PanelBrush}"
+                    BorderBrush="{StaticResource DiscordBrush}" BorderThickness="0,3,0,0">
+                <StackPanel>
+                    <TextBlock Text="DISCORD" FontSize="16" FontWeight="Bold" Margin="0,6,0,0" Foreground="{StaticResource DiscordBrush}"/>
+                    <TextBlock Style="{StaticResource Caption}" Text="DISCORD APP  (process to listen to)"/>
+                    <ComboBox x:Name="DiscordAppBox" IsEditable="True"/>
+                    <ProgressBar x:Name="DiscordMeter" Style="{StaticResource Meter}" Foreground="{StaticResource DiscordBrush}"/>
+                    <DockPanel Margin="0,6,0,0">
+                        <TextBlock x:Name="DiscordGainText" DockPanel.Dock="Right" Width="52" TextAlignment="Right" VerticalAlignment="Center" Foreground="{StaticResource MutedBrush}"/>
+                        <Slider x:Name="DiscordGain" Minimum="-24" Maximum="12" TickFrequency="1" IsSnapToTickEnabled="True"
+                                ToolTip="Volume of Discord voices going into the Xbox party. Double-click resets."/>
+                    </DockPanel>
+                    <TextBlock x:Name="DiscordStatus" Style="{StaticResource Hint}" Text="stopped"/>
+
+                    <TextBlock Style="{StaticResource Caption}" Text="SEND TO DISCORD  (virtual output)" Margin="0,18,0,4"/>
+                    <ComboBox x:Name="ToDiscordBox"/>
+                    <ProgressBar x:Name="ToDiscordMeter" Style="{StaticResource Meter}" Foreground="{StaticResource DiscordBrush}"/>
+                    <TextBlock x:Name="DiscordHint" Style="{StaticResource Hint}"/>
+                    <TextBlock x:Name="DiscordCheck" Style="{StaticResource Hint}" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- You -->
+            <Border Grid.Column="2" Padding="16,6,16,14" CornerRadius="10" Background="{StaticResource PanelBrush}"
+                    BorderBrush="{StaticResource MicBrush}" BorderThickness="0,3,0,0">
+                <StackPanel>
+                    <TextBlock Text="YOU" FontSize="16" FontWeight="Bold" Margin="0,6,0,0" Foreground="{StaticResource MicBrush}"/>
+                    <TextBlock Style="{StaticResource Caption}" Text="YOUR MIC  (goes to both sides)"/>
+                    <ComboBox x:Name="MicBox"/>
+                    <ProgressBar x:Name="MicMeter" Style="{StaticResource Meter}" Foreground="{StaticResource MicBrush}"/>
+                    <DockPanel Margin="0,6,0,0">
+                        <TextBlock x:Name="MicGainText" DockPanel.Dock="Right" Width="52" TextAlignment="Right" VerticalAlignment="Center" Foreground="{StaticResource MutedBrush}"/>
+                        <Slider x:Name="MicGain" Minimum="-24" Maximum="12" TickFrequency="1" IsSnapToTickEnabled="True"
+                                ToolTip="Your mic volume on both sides. Double-click resets."/>
+                    </DockPanel>
+
+                    <TextBlock Style="{StaticResource Caption}" Text="WHAT GOES WHERE" Margin="0,22,0,6"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="22">
+                        <Run Text="Discord voices" Foreground="{StaticResource DiscordBrush}" FontWeight="SemiBold"/>
+                        <Run Text=" + your mic  →  Xbox party"/>
+                        <LineBreak/>
+                        <Run Text="Xbox party voices" Foreground="{StaticResource XboxBrush}" FontWeight="SemiBold"/>
+                        <Run Text=" + your mic  →  Discord"/>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Hint}" Margin="0,10,0,0"
+                               Text="You keep hearing both apps in your own headset as normal. Nothing is sent back to the app it came from, so there is no echo loop."/>
+                </StackPanel>
+            </Border>
+
+            <!-- Xbox side -->
+            <Border Grid.Column="4" Padding="16,6,16,14" CornerRadius="10" Background="{StaticResource PanelBrush}"
+                    BorderBrush="{StaticResource XboxBrush}" BorderThickness="0,3,0,0">
+                <StackPanel>
+                    <TextBlock Text="XBOX PARTY" FontSize="16" FontWeight="Bold" Margin="0,6,0,0" Foreground="{StaticResource XboxBrush}"/>
+                    <TextBlock Style="{StaticResource Caption}" Text="XBOX PARTY SPEAKER  (the party plays into this)"/>
+                    <ComboBox x:Name="XboxSpeakerBox"/>
+                    <TextBlock Style="{StaticResource Caption}" Text="YOU HEAR THE PARTY ON  (your headset)"/>
+                    <ComboBox x:Name="HearBox"/>
+                    <StackPanel x:Name="XboxAppPanel">
+                        <TextBlock Style="{StaticResource Caption}" Text="XBOX PARTY APP  (process to listen to)"/>
+                        <ComboBox x:Name="XboxAppBox" IsEditable="True"/>
+                    </StackPanel>
+                    <ProgressBar x:Name="XboxMeter" Style="{StaticResource Meter}" Foreground="{StaticResource XboxBrush}"/>
+                    <DockPanel Margin="0,6,0,0">
+                        <TextBlock x:Name="XboxGainText" DockPanel.Dock="Right" Width="52" TextAlignment="Right" VerticalAlignment="Center" Foreground="{StaticResource MutedBrush}"/>
+                        <Slider x:Name="XboxGain" Minimum="-24" Maximum="12" TickFrequency="1" IsSnapToTickEnabled="True"
+                                ToolTip="Volume of Xbox party voices going into Discord. Double-click resets."/>
+                    </DockPanel>
+                    <TextBlock x:Name="XboxStatus" Style="{StaticResource Hint}" Text="stopped"/>
+                    <TextBlock x:Name="XboxSpeakerHint" Style="{StaticResource Hint}"/>
+                    <TextBlock x:Name="XboxSpeakerCheck" Style="{StaticResource Hint}" FontWeight="SemiBold" Margin="0,4,0,0"/>
+
+                    <TextBlock Style="{StaticResource Caption}" Text="SEND TO XBOX PARTY  (virtual output)" Margin="0,18,0,4"/>
+                    <ComboBox x:Name="ToXboxBox"/>
+                    <ProgressBar x:Name="ToXboxMeter" Style="{StaticResource Meter}" Foreground="{StaticResource XboxBrush}"/>
+                    <TextBlock x:Name="XboxHint" Style="{StaticResource Hint}"/>
+                    <TextBlock x:Name="XboxCheck" Style="{StaticResource Hint}" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <DockPanel Grid.Row="2" Margin="20,0,20,8">
+            <CheckBox x:Name="AutoStartCheck" Content="Start the bridge when PartyBridge opens" DockPanel.Dock="Left"/>
+            <Button x:Name="RefreshBtn" Content="Refresh lists" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+        </DockPanel>
+
+        <Border Grid.Row="3" Background="{StaticResource PanelBrush}" Padding="20,8">
+            <TextBlock x:Name="StatusText" Foreground="{StaticResource MutedBrush}" Text="Ready."/>
+        </Border>
+    </Grid>
+</Window>
